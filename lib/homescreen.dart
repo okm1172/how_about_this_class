@@ -38,12 +38,14 @@ class _search_screenState extends State<search_screen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(height: 250,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+
                     GradientText(
                       "이 수업 어때 ?",
                       textAlign: TextAlign.center,
@@ -223,14 +225,9 @@ class _search_screenState extends State<search_screen> {
                 Text('과목명'),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
 
 
-            SizedBox(
-              height: 60,
-            ),
+            SizedBox(height: 300,),
             GestureDetector(
                 onTap: () => Navigator.of(context).push(
                       PageRouteBuilder(
@@ -281,6 +278,7 @@ class _search_screenState extends State<search_screen> {
                     ],
                   ),
                 )),
+            SizedBox(height: 50,)
           ],
         ),
       ),

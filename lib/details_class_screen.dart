@@ -70,7 +70,7 @@ class _details_class_screenState extends State<details_class_screen> {
       body: SingleChildScrollView(
         child: Container(
           color: Colors.white,
-          width: MediaQuery.sizeOf(context).width,
+
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -122,7 +122,7 @@ class _details_class_screenState extends State<details_class_screen> {
                 ],
 
               ),
-              buildRadialGauge('권구인 교수님', 4.5),
+              buildRadialGauge('과목명', 4.5),
               Container(
                 height: 30,
                 width: 400,
@@ -160,194 +160,162 @@ class _details_class_screenState extends State<details_class_screen> {
                 ),
               ),
               SizedBox(height: 10,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius:
-                          BorderRadius.circular(20.0), // 이 부분이 모서리를 둥글게 만듭니다.
-                    ),
-                    height: 200,
-                    width: 130,
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 30,
-                          width: 70,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(30.0),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius:
+                        BorderRadius.circular(20.0), // 이 부분이 모서리를 둥글게 만듭니다.
+                      ),
+                      height: 200,
+                      width: 130,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 70,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '강의 계획 적절성',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.grey),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '추천도',
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.grey),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                            height: 120,
-                            width: 130,
-                            child: minibuildRadialGauge('', 4.7))
-                      ],
+                          Container(
+                              height: 120,
+                              width: 130,
+                              child: minibuildRadialGauge('', 4.7))
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius:
-                      BorderRadius.circular(20.0), // 이 부분이 모서리를 둥글게 만듭니다.
-                    ),
-                    height: 200,
-                    width: 130,
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 70,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(30.0),
+                    SizedBox(width: 20,),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius:
+                        BorderRadius.circular(20.0), // 이 부분이 모서리를 둥글게 만듭니다.
+                      ),
+                      height: 200,
+                      width: 130,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 70,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '수업 방법 적절성',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.grey),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '강의 계획 적절성',
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.grey),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                            height: 120,
-                            width: 130,
-                            child: minibuildRadialGauge('', 4.7))
-                      ],
+                          Container(
+                              height: 120,
+                              width: 130,
+                              child: minibuildRadialGauge('', 4.7))
+                        ],
+                      ),
                     ),
-                  ),Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius:
-                      BorderRadius.circular(20.0), // 이 부분이 모서리를 둥글게 만듭니다.
-                    ),
-                    height: 200,
-                    width: 130,
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 70,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(30.0),
+                    SizedBox(width: 20,),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius:
+                        BorderRadius.circular(20.0), // 이 부분이 모서리를 둥글게 만듭니다.
+                      ),
+                      height: 200,
+                      width: 130,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 30,
+                            width: 70,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '수업 성과',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.grey),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '수업 방법 적절성',
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.grey),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                            height: 120,
-                            width: 130,
-                            child: minibuildRadialGauge('', 4.7))
-                      ],
+                          SizedBox(height: 20,),
+                          Container(
+                              height: 120,
+                              width: 130,
+                              child: minibuildRadialGauge('', 4.7))
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius:
-                      BorderRadius.circular(20.0), // 이 부분이 모서리를 둥글게 만듭니다.
-                    ),
-                    height: 200,
-                    width: 130,
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 30,
-                          width: 70,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(30.0),
+                    SizedBox(width: 20,),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius:
+                        BorderRadius.circular(20.0), // 이 부분이 모서리를 둥글게 만듭니다.
+                      ),
+                      height: 200,
+                      width: 130,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 30,
+                            width: 70,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '수업 성과2 ',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.grey),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '수업 성과',
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.grey),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                            height: 120,
-                            width: 130,
-                            child: minibuildRadialGauge('', 4.7))
-                      ],
+                          SizedBox(height: 20,),
+                          Container(
+                              height:120,
+                              width: 130,
+                              child: minibuildRadialGauge('', 4.7))
+                        ],
+                      ),
                     ),
-                  ),Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius:
-                      BorderRadius.circular(20.0), // 이 부분이 모서리를 둥글게 만듭니다.
-                    ),
-                    height: 200,
-                    width: 130,
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 30,
-                          width: 70,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '수업 성과2',
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.grey),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                            height: 120,
-                            width: 130,
-                            child: minibuildRadialGauge('', 4.7))
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
 
               SizedBox(
