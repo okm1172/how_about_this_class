@@ -1,6 +1,6 @@
 # how_about_this_class
 
-A new Flutter project.
+이 프로 젝트는 학교 과목 추천도와 에브리 타임 추천도를 쉽고 빠르게 보기위함과 학생들에게 좋은 수강 신청을 위한 어플리 케이션이다
 
 ## Getting Started
 
