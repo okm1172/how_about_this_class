@@ -9,7 +9,7 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import 'Integrated_analysis_screen.dart';
 import 'componet/item.dart';
-
+import 'package:http/http.dart' as http;
 class search_screen extends StatefulWidget {
   const search_screen({super.key});
 
@@ -173,11 +173,27 @@ class _search_screenState extends State<search_screen> {
                         IconButton(
                           icon: Icon(Icons.search, color: Colors.white),
                           onPressed: () {
+                            if(class_search==true)
                             Navigator.of(context).push(
                               PageRouteBuilder(
                                 pageBuilder:
                                     (context, animation, secondaryAnimation) =>
-                                        class_recommend_screen(),
+                                        class_recommend_screen(dep_:_selected_dep ,class_:searchText ,),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                            else if(professor_search==true)
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        professor_recommend_screen(dep_:_selected_dep ,professor_: searchText,),
                                 transitionsBuilder: (context, animation,
                                     secondaryAnimation, child) {
                                   return FadeTransition(

@@ -19,8 +19,8 @@ Widget buildRadialGauge(String professor_name,double score) {
               widget: Container(
                   child: Text(score.toStringAsFixed(1),
                       style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))),
-              angle: 90,
-              positionFactor: 0.5)
+              angle: 70,
+              positionFactor: 0.1)
         ],
         pointers: <GaugePointer>[
           RangePointer(
@@ -47,7 +47,7 @@ Widget minibuildRadialGauge(String professor_name,double score) {
     enableLoadingAnimation: true,
     animationDuration: 3000,
     title: GaugeTitle(
-        text: professor_name,
+        text: '(23-2 기준)'+'\n'+professor_name,
         textStyle: TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
     axes: <RadialAxis>[
       RadialAxis(
@@ -57,7 +57,7 @@ Widget minibuildRadialGauge(String professor_name,double score) {
           GaugeAnnotation(
               widget: Container(
                   child: Text(score.toStringAsFixed(1),
-                      style: TextStyle(fontSize: 12,))),
+                      style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold))),
               angle: 90,
               positionFactor: 1)
         ],

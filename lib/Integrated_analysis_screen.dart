@@ -7,7 +7,7 @@ import 'package:how_about_this_class/homescreen.dart';
 import 'package:how_about_this_class/recommend_screen/professor_recommed_screen.dart';
 import 'package:how_about_this_class/splash_screen/splash_screen.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-
+import 'package:http/http.dart' as http;
 class homescreen extends StatefulWidget {
   const homescreen({super.key});
 
@@ -235,7 +235,13 @@ class _homescreenState extends State<homescreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(items[index]+' CSE1010', style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                                    // Text(items[index]+' CSE1010'+'(23년2학기 기준)', style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                                      Text.rich(TextSpan(
+                                        text:items[index]+' CSE1010 ', style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
+                                        children: <TextSpan> [TextSpan(
+                                          text: '(23학년2학기 기준)',style: TextStyle(fontSize: 13 ,fontWeight: FontWeight.bold,color: Colors.grey)
+                                        )]
+                                      )),
                                       Text(items0[index], style: TextStyle(fontSize: 13,color: Colors.grey.shade700),),
                                       Text('학과: 컴퓨터공학과', style: TextStyle(fontSize: 13,color: Colors.grey.shade700),),
 

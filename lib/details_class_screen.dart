@@ -6,6 +6,7 @@ import 'package:how_about_this_class/homescreen.dart';
 import 'package:how_about_this_class/splash_screen/splash_screen.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:http/http.dart' as http;
 
 class details_class_screen extends StatefulWidget {
   const details_class_screen({super.key});
@@ -123,6 +124,9 @@ class _details_class_screenState extends State<details_class_screen> {
 
               ),
               buildRadialGauge('과목명', 4.5),
+                Text("전체 수강자 수 : "+"숫자"),
+                Text("설문 참여자 수 : "+"숫자"),
+              SizedBox(height: 10,),
               Container(
                 height: 30,
                 width: 400,
@@ -136,7 +140,7 @@ class _details_class_screenState extends State<details_class_screen> {
                       another_professor = !another_professor;
                     });
                   },
-                  child: Text('다른 교수님 보기'),
+                  child: Text('수업 개설 교수'),
                 ),
               ),
               Visibility(
@@ -298,7 +302,7 @@ class _details_class_screenState extends State<details_class_screen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '수업 성과2 ',
+                                  '수업 성과2',
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.grey),
                                   textAlign: TextAlign.center,
@@ -408,9 +412,6 @@ class _details_class_screenState extends State<details_class_screen> {
                             buildKeywordWidget1('키워드1'),
                           ],
                         ),
-
-
-
                       ],
                     )
                   ),
@@ -508,21 +509,11 @@ class _details_class_screenState extends State<details_class_screen> {
                               buildKeywordWidget1('키워드1'),
                             ],
                           ),
-
-
-
                         ],
                       )
                   ),
                 ),
               ),
-
-
-
-
-
-
-
               SizedBox(
                 height: 10,
               ),

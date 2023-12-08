@@ -1,12 +1,22 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:how_about_this_class/componet/gauge.dart';
 import 'package:how_about_this_class/details_class_screen.dart';
 import 'package:how_about_this_class/splash_screen/splash_screen.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:http/http.dart' as http;
 
+import '../class/lecture.dart';
 class professor_recommend_screen extends StatefulWidget {
-  const professor_recommend_screen({super.key});
+  final String dep_;
+  final String professor_;
+
+  const professor_recommend_screen({
+    required this.dep_,
+    required this.professor_,
+    super.key});
 
   @override
   State<professor_recommend_screen> createState() =>
@@ -15,6 +25,90 @@ class professor_recommend_screen extends StatefulWidget {
 
 class _professor_recommend_screenState
     extends State<professor_recommend_screen> {
+    List <Lecture> ?lecture;
+    double recommand_score=0;
+
+
+  Future<void> fetchData() async {
+    var url = Uri.parse('http://3.12.111.59/api/v1/search');
+    var queryParams = {
+      'major': widget.dep_,
+      'keyword': widget.professor_,
+      'condition':'professor'
+    };
+    var uri = Uri.http(
+        url.authority, url.path, queryParams);
+    var headers = {
+      'accept':'application/json',
+    };
+    try {
+      var response = await http.get(
+          uri,headers: headers);
+      if (response.statusCode == 200) {
+        // 성공적으로 데이터를 받아왔을 때의 처리
+        print('Response data: ${utf8.decode(response.bodyBytes)}');
+        List<dynamic> jsonData = (jsonDecode(utf8.decode(response.bodyBytes)));
+        List<Lecture> _lectures = jsonData.map((json) => Lecture.fromJson(json)).toList();
+        double sum = 0;
+        int count = 0;
+        for (var lecture_ in _lectures) {
+          // option_1 값이 있는지 확인하고, 있으면 합계에 추가
+          if (lecture_.options.containsKey('option_1')) {
+            sum += double.parse(lecture_.options['option_1']!);
+            count++;
+          }
+        }
+        double average = count > 0 ? sum / count : 0;
+        setState(() {
+          lecture=_lectures;
+          recommand_score=average;
+        });
+
+      } else {
+        // 서버 에러 처리
+        print('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      // 네트워크 에러 처리
+      print('Exception caught: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      await fetchData();
+      setState(() { });
+    });
+    super.initState();
+  }
+
+    List<Widget> buildGestureDetectors(BuildContext context) {
+      return lecture!.map((lecture) {
+        return GestureDetector(
+          onTap: () => Navigator.of(context).push(
+            PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) => details_class_screen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+            ),
+          ),
+          child: Container(
+            height: 120,
+            width: 120,
+            child: minibuildRadialGauge(lecture.lectureName, double.parse(lecture.options['option_1']!)),
+          ),
+        );
+      }).toList();
+    }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +128,7 @@ class _professor_recommend_screenState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            buildRadialGauge('권구인 교수님', 4.5),
+            buildRadialGauge(widget.professor_, recommand_score),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -165,68 +259,7 @@ class _professor_recommend_screenState
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        details_class_screen(),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            ),
-                        child: Container(
-                          height: 120,
-                          width: 120,
-                          child: minibuildRadialGauge('컴퓨터네트워크', 4.5),
-                        )),
-                    GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        details_class_screen(),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            ),
-                        child: Container(
-                          height: 150,
-                          width: 120,
-                          child: minibuildRadialGauge('객체지향프로그래밍', 4.6),
-                        )),
-                    GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        details_class_screen(),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            ),
-                        child: Container(
-                          height: 120,
-                          width: 120,
-                          child: minibuildRadialGauge('이산수학', 3.9),
-                        ))
-                  ],
+                  children:  buildGestureDetectors(context),
                 ),
               ),
             )
@@ -234,5 +267,7 @@ class _professor_recommend_screenState
         ),
       ),
     );
+
   }
+
 }

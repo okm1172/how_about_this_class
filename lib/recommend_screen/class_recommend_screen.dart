@@ -3,15 +3,48 @@ import 'package:how_about_this_class/details_class_screen.dart';
 
 import '../componet/gauge.dart';
 import '../splash_screen/splash_screen.dart';
+import 'package:http/http.dart' as http;
 
 class class_recommend_screen extends StatefulWidget {
-  const class_recommend_screen({super.key});
+  final String dep_;
+  final String class_;
+  const class_recommend_screen({
+    required this.dep_,
+    required this.class_,
+    super.key});
 
   @override
   State<class_recommend_screen> createState() => _class_recommend_screenState();
 }
 
 class _class_recommend_screenState extends State<class_recommend_screen> {
+  Future<void> fetchData() async {
+    var url = Uri.parse('https://xgojt37mn2ddxibp2uova4k32u0bffwr.lambda-url.us-east-2.on.aws?uk=2');
+    try {
+      var response = await http.get(url);
+      if (response.statusCode == 200) {
+        // 성공적으로 데이터를 받아왔을 때의 처리
+        print('Response data: ${response.body}');
+      } else {
+        // 서버 에러 처리
+        print('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      // 네트워크 에러 처리
+      print('Exception caught: $e');
+    }
+  }
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      await fetchData();
+      setState(() { });
+    });
+    super.initState();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,70 +193,73 @@ class _class_recommend_screenState extends State<class_recommend_screen> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        details_class_screen(),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                          onTap: () => Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  pageBuilder:
+                                      (context, animation, secondaryAnimation) =>
+                                          details_class_screen(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                        child: Container(
-                          height: 120,
-                          width: 120,
-                          child: minibuildRadialGauge('김영호교수님', 4.9),
-                        )),
-                    GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        details_class_screen(),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
+                          child: Container(
+                            height: 120,
+                            width: 120,
+                            child: minibuildRadialGauge('김영호교수님', 4.9),
+                          )),
+                      GestureDetector(
+                          onTap: () => Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  pageBuilder:
+                                      (context, animation, secondaryAnimation) =>
+                                          details_class_screen(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                        child: Container(
-                          height: 150,
-                          width: 120,
-                          child: minibuildRadialGauge('심정섭교수님', 5),
-                        )),
-                    GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        details_class_screen(),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
+                          child: Container(
+                            height: 120,
+                            width: 120,
+                            child: minibuildRadialGauge('심정섭교수님', 5),
+                          )),
+                      GestureDetector(
+                          onTap: () => Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  pageBuilder:
+                                      (context, animation, secondaryAnimation) =>
+                                          details_class_screen(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                        child: Container(
-                          height: 120,
-                          width: 120,
-                          child: minibuildRadialGauge('이문규교수님', 4.5),
-                        ))
-                  ],
+                          child: Container(
+                            height: 120,
+                            width: 120,
+                            child: minibuildRadialGauge('이문규교수님', 4.5),
+                          ))
+                    ],
+                  ),
                 ),
               ),
             )
