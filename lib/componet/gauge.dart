@@ -42,12 +42,14 @@ Widget buildRadialGauge(String professor_name,double score) {
 }
 
 
-Widget minibuildRadialGauge(String professor_name,double score) {
+Widget minibuildRadialGauge(String professor_name,double score,String sem) {
+  String year = sem.substring(2, 4); // Extracts the year part
+  String semester = sem.substring(4, 6) == "02" ? "2" : "1"; //
   return SfRadialGauge(
     enableLoadingAnimation: true,
     animationDuration: 3000,
     title: GaugeTitle(
-        text: '(23-2 기준)'+'\n'+professor_name,
+        text: "${year}년 ${semester}학기"+'\n'+professor_name,
         textStyle: TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
     axes: <RadialAxis>[
       RadialAxis(

@@ -201,7 +201,7 @@ class _details_class_screenState extends State<details_class_screen> {
                           Container(
                               height: 120,
                               width: 130,
-                              child: minibuildRadialGauge('', 4.7))
+                              child: minibuildRadialGauge('', 4.7,"202020"),)
                         ],
                       ),
                     ),
@@ -238,7 +238,7 @@ class _details_class_screenState extends State<details_class_screen> {
                           Container(
                               height: 120,
                               width: 130,
-                              child: minibuildRadialGauge('', 4.7))
+                              child: minibuildRadialGauge('', 4.7,'202202'))
                         ],
                       ),
                     ),
@@ -276,7 +276,7 @@ class _details_class_screenState extends State<details_class_screen> {
                           Container(
                               height: 120,
                               width: 130,
-                              child: minibuildRadialGauge('', 4.7))
+                              child: minibuildRadialGauge('', 4.7,'202202'))
                         ],
                       ),
                     ),
@@ -314,7 +314,7 @@ class _details_class_screenState extends State<details_class_screen> {
                           Container(
                               height:120,
                               width: 130,
-                              child: minibuildRadialGauge('', 4.7))
+                              child: minibuildRadialGauge('', 4.7,'202202'))
                         ],
                       ),
                     ),
