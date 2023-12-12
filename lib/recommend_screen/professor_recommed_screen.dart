@@ -82,19 +82,21 @@ class _professor_recommend_screenState
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       await fetchData();
       setState(() { });
     });
-    super.initState();
+
   }
 
     List<Widget> buildGestureDetectors_op1(BuildContext context) {
+      if (lecture == null) return [];
       return lecture!.map((lecture) {
         return GestureDetector(
           onTap: () => Navigator.of(context).push(
             PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) => details_class_screen(),
+              pageBuilder: (context, animation, secondaryAnimation) => details_class_screen(uk:lecture.detailUk),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: animation,
@@ -112,11 +114,12 @@ class _professor_recommend_screenState
       }).toList();
     }
 List<Widget> buildGestureDetectors_op2(BuildContext context) {
+  if (lecture == null) return [];
       return lecture!.map((lecture) {
         return GestureDetector(
           onTap: () => Navigator.of(context).push(
             PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) => details_class_screen(),
+              pageBuilder: (context, animation, secondaryAnimation) => details_class_screen(uk:lecture.detailUk),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: animation,
@@ -134,11 +137,12 @@ List<Widget> buildGestureDetectors_op2(BuildContext context) {
       }).toList();
     }
 List<Widget> buildGestureDetectors_op3(BuildContext context) {
+  if (lecture == null) return [];
       return lecture!.map((lecture) {
         return GestureDetector(
           onTap: () => Navigator.of(context).push(
             PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) => details_class_screen(),
+              pageBuilder: (context, animation, secondaryAnimation) => details_class_screen(uk:lecture.detailUk),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: animation,
@@ -156,11 +160,12 @@ List<Widget> buildGestureDetectors_op3(BuildContext context) {
       }).toList();
     }
 List<Widget> buildGestureDetectors_op4(BuildContext context) {
+  if (lecture == null) return [];
       return lecture!.map((lecture) {
         return GestureDetector(
           onTap: () => Navigator.of(context).push(
             PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) => details_class_screen(),
+              pageBuilder: (context, animation, secondaryAnimation) => details_class_screen(uk:lecture.detailUk),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: animation,
@@ -178,11 +183,12 @@ List<Widget> buildGestureDetectors_op4(BuildContext context) {
       }).toList();
     }
 List<Widget> buildGestureDetectors_op5(BuildContext context) {
+  if (lecture == null) return [];
       return lecture!.map((lecture) {
         return GestureDetector(
           onTap: () => Navigator.of(context).push(
             PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) => details_class_screen(),
+              pageBuilder: (context, animation, secondaryAnimation) => details_class_screen(uk:lecture.detailUk),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: animation,
@@ -230,7 +236,18 @@ List<Widget> buildGestureDetectors_op5(BuildContext context) {
           color: Colors.black, // 여기서 아이콘 색상을 검정색으로 설정합니다.
         ),
       ),
-      body: Container(
+      body: lecture==null? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(width :30,height:30
+                  ,child: CircularProgressIndicator()),
+            ],
+          ),
+        ],
+      ):Container(
         color: Colors.white,
         height: MediaQuery.sizeOf(context).height,
         width: MediaQuery.sizeOf(context).width,

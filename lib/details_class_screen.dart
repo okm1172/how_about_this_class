@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:how_about_this_class/componet/contain.dart';
@@ -8,36 +11,129 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 
+import 'class/detail_lecture.dart';
+
 class details_class_screen extends StatefulWidget {
-  const details_class_screen({super.key});
+  final int uk;
+
+  const details_class_screen({
+    required this.uk,
+    super.key});
 
   @override
   State<details_class_screen> createState() => _details_class_screenState();
 }
+String to_hakgi(String sem){
+  String year = sem.substring(2, 4); // Extracts the year part
+  String semester = sem.substring(4, 6) == "02" ? "2" : "1"; //
+  return "${year}년 ${semester}학기";
+}
+
+List<semeData> createSemeDataList(List<dynamic> portalData) {
+  return portalData.map((data) {
+    String semester = to_hakgi(data['semester']);
+    double score = double.tryParse(data['option_5'].toString()) ?? 0.0;
+    return semeData(semester, score);
+  }).toList();
+}
+
+
+List<semeData> createSemeDataList1(List<dynamic> everytimeData) {
+  return everytimeData.map((data) {
+    String semester = to_hakgi(data['semester']);
+    double score = double.tryParse(data['rating_average'].toString()) ?? 0.0;
+    return semeData(semester, score);
+  }).toList();
+}
+
 
 class _details_class_screenState extends State<details_class_screen> {
+  Lecture? lecture;
 
-  final List<semeData> chartData = [
-    semeData('20-2', 5),
-    semeData('21-1', 4),
-    semeData('21-2', 3),
-    semeData('22-1', 2),
-    semeData('22-2', 1),
-    semeData('23-1', 5),
 
-  ];
-  final List<semeData> chartData2= [
-    semeData('20-2', 4),
-    semeData('21-1', 4.6),
-    semeData('21-2', 4.5),
-    semeData('22-1', 4.5),
-    semeData('22-2', 4.6),
-    semeData('23-1', 4.9),
+  Future<void> fetchData() async {
+    var url = Uri.parse('https://xgojt37mn2ddxibp2uova4k32u0bffwr.lambda-url.us-east-2.on.aws');
+    var queryParams = {
+      'uk': widget.uk.toString()
+    };
+    var uri = Uri.https(
+        url.authority, url.path, queryParams);
+    var headers = {
+      'accept':'application/json',
+    };
+    try {
+      var response = await http.get(
+          uri,headers: headers);
+      //print('Response data: ${utf8.decode(response.bodyBytes)}');
 
-  ];
 
-  List<String> grade =['2022년 2학기','2023년 1학기'];
-  String sel_grade="없음";
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonMap = json.decode(utf8.decode(response.bodyBytes));
+
+
+        Lecture _lecture = Lecture.fromJson(jsonMap);
+        setState(() {
+          lecture=_lecture;
+          sel_grade=lecture!.portal[0].semester;
+          List<semeData> semeDataList = createSemeDataList(jsonMap['portal']);
+          semeDataList.sort((a, b) => a.seme.compareTo(b.seme));
+          if(_lecture.everytime.isNotEmpty){
+
+            List<dynamic> everytimeData = jsonMap['everytime'];
+            List<semeData> semeDataList1 = createSemeDataList1(everytimeData);
+              semeDataList1.sort((a, b) => a.seme.compareTo(b.seme));
+              chartData1=semeDataList1;
+
+
+
+          }
+
+          chartData2=semeDataList;
+          chartData1!.sort((a, b) => a.seme.compareTo(b.seme));
+          chartData2!.sort((a, b) => a.seme.compareTo(b.seme));
+
+
+        });
+
+      } else {
+        // 서버 에러 처리
+        print('디테일 페이지 failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      // 네트워크 에러 처리
+      print('디테일 페이지 Exception caught: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      await fetchData();
+      setState(() { });
+    });
+    super.initState();
+  }
+
+  List<Widget> buildKeywordWidgetsbad(List<String> keywords) {
+    return keywords.map((keyword) {
+      return buildKeywordWidget1(keyword); // 여기서 buildKeywordWidget1은 주어진 키워드로 위젯을 생성하는 함수
+    }).toList();
+  }
+
+  List<Widget> buildKeywordWidgetsgood(List<String> keywords) {
+    return keywords.map((keyword) {
+      return buildKeywordWidget(keyword); // 여기서 buildKeywordWidget1은 주어진 키워드로 위젯을 생성하는 함수
+    }).toList();
+  }
+
+
+
+
+   List<semeData> ?chartData2;
+   List<semeData> ?chartData1;
+
+
+  String ?sel_grade;
   int sel_num=0;
   bool isParagraphVisible=true;
   bool first_semester=true;
@@ -68,10 +164,20 @@ class _details_class_screenState extends State<details_class_screen> {
           color: Colors.black, // 여기서 아이콘 색상을 검정색으로 설정합니다.
         ),
       ),
-      body: SingleChildScrollView(
+      body: lecture==null ?  Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(width :30,height:30
+                  ,child: CircularProgressIndicator()),
+            ],
+          ),
+        ],
+      ): SingleChildScrollView(
         child: Container(
           color: Colors.white,
-
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -86,7 +192,7 @@ class _details_class_screenState extends State<details_class_screen> {
                   ),
                   child: CupertinoButton(
                       child: Text(
-                        '학기 : ' +sel_grade,
+                        '학기 : ' +sel_grade!,
                         style: TextStyle(fontSize: 15, color: Colors.white,fontWeight: FontWeight.bold),
                       ),
                       onPressed: () => showCupertinoModalPopup(
@@ -100,12 +206,12 @@ class _details_class_screenState extends State<details_class_screen> {
                                 onSelectedItemChanged: (int value) {
                                   setState(() {
                                     sel_num= value;
-                                    sel_grade= grade[value];
+                                    sel_grade= lecture!.portal[value].semester;
                                   });
                                 },
-                                children: List<Widget>.generate(grade.length,
+                                children: List<Widget>.generate(lecture!.portal.length,
                                         (int index) {
-                                      return Center(child: Text(grade[index]));
+                                      return Center(child: Text(lecture!.portal[index].semester));
                                     }),
                               ),
                             );
@@ -113,19 +219,14 @@ class _details_class_screenState extends State<details_class_screen> {
                 ),
                   SizedBox(width: 20,),
 
-                  ElevatedButton(
-                    onPressed: null,//todo 여기다 바뀌는거 넣기
-                    child: Text("확인",style: TextStyle(
-                      color: Colors.white,fontWeight: FontWeight.bold
-                    ),),
-                  ),
+
                   SizedBox(width: 20,)
                 ],
 
               ),
-              buildRadialGauge('과목명', 4.5),
-                Text("전체 수강자 수 : "+"숫자"),
-                Text("설문 참여자 수 : "+"숫자"),
+              buildRadialGauge(lecture!.lectureName,double.parse(lecture!.portal[sel_num].option5)),
+                Text("전체 수강자 수 : "+lecture!.portal[sel_num].totalCnt.toString()),
+                Text("설문 참여자 수 : "+lecture!.portal[sel_num].surveyCnt.toString()),
               SizedBox(height: 10,),
               Container(
                 height: 30,
@@ -155,10 +256,9 @@ class _details_class_screenState extends State<details_class_screen> {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        buildprofessrodWidget("교수1"),
-                        buildprofessrodWidget("교수1"),
-                      ],
+                      children: List.generate(lecture!.professorNames.length, (index) {
+                        return buildprofessrodWidget(lecture!.professorNames[index]);
+                      }),
                     ),
                   ),
                 ),
@@ -201,7 +301,7 @@ class _details_class_screenState extends State<details_class_screen> {
                           Container(
                               height: 120,
                               width: 130,
-                              child: minibuildRadialGauge('', 4.7,"202020"),)
+                              child: minibuildRadialGauge(lecture!.portal[sel_num].option1,double.parse(lecture!.portal[sel_num].option1),lecture!.portal[sel_num].semester),)
                         ],
                       ),
                     ),
@@ -238,7 +338,7 @@ class _details_class_screenState extends State<details_class_screen> {
                           Container(
                               height: 120,
                               width: 130,
-                              child: minibuildRadialGauge('', 4.7,'202202'))
+                              child: minibuildRadialGauge(lecture!.portal[sel_num].option2, double.parse(lecture!.portal[sel_num].option2),lecture!.portal[sel_num].semester))
                         ],
                       ),
                     ),
@@ -276,7 +376,7 @@ class _details_class_screenState extends State<details_class_screen> {
                           Container(
                               height: 120,
                               width: 130,
-                              child: minibuildRadialGauge('', 4.7,'202202'))
+                              child: minibuildRadialGauge(lecture!.portal[sel_num].option3, double.parse(lecture!.portal[sel_num].option3),lecture!.portal[sel_num].semester))
                         ],
                       ),
                     ),
@@ -314,7 +414,7 @@ class _details_class_screenState extends State<details_class_screen> {
                           Container(
                               height:120,
                               width: 130,
-                              child: minibuildRadialGauge('', 4.7,'202202'))
+                              child: minibuildRadialGauge(lecture!.portal[sel_num].option4, double.parse(lecture!.portal[sel_num].option4),lecture!.portal[sel_num].semester))
                         ],
                       ),
                     ),
@@ -338,7 +438,7 @@ class _details_class_screenState extends State<details_class_screen> {
                       first_semester = !first_semester;
                     });
                   },
-                  child: Text('2023년도 1학기 보기'),
+                  child:lecture!.everytime.isNotEmpty==true?Text(to_hakgi(lecture!.everytime[0].semester)+' 보기'):Text("데이터 없음")
                 ),
               ),
               Visibility(
@@ -373,13 +473,12 @@ class _details_class_screenState extends State<details_class_screen> {
                         Wrap(
                           spacing: 8.0, // 각 자식 위젯 사이의 가로 간격
                           runSpacing: 8.0,
-                          children: [
-                            buildKeywordWidget('글자수에 따라 잘 늘어나는 키워드'),
-                            buildKeywordWidget('row를 넘어가는지 확인을 하는 키워드'),
-                            buildKeywordWidget('키워드1'),
-                            buildKeywordWidget('키워드1'),
-                            buildKeywordWidget('키워드1'),
-                          ],
+                          children:lecture!.everytime.isNotEmpty==true?
+                            buildKeywordWidgetsgood(lecture!.everytime[0].positiveKeywords)
+                          :[
+                            buildKeywordWidget('없음'),
+                          ]
+
                         ),
                         SizedBox(height: 10,),
                         Container(
@@ -404,13 +503,11 @@ class _details_class_screenState extends State<details_class_screen> {
                         Wrap(
                           spacing: 8.0, // 각 자식 위젯 사이의 가로 간격
                           runSpacing: 8.0,
-                          children: [
-                            buildKeywordWidget1('글자수에 따라 잘 늘어나는 키워드'),
-                            buildKeywordWidget1('row를 넘어가는지 확인을 하는 키워드'),
-                            buildKeywordWidget1('키워드1'),
-                            buildKeywordWidget1('키워드1'),
-                            buildKeywordWidget1('키워드1'),
-                          ],
+                          children: lecture!.everytime.isNotEmpty==true?
+                          buildKeywordWidgetsbad(lecture!.everytime[0].negativeKeywords)
+                              :[
+                            buildKeywordWidget('없음'),
+                          ]
                         ),
                       ],
                     )
@@ -434,7 +531,7 @@ class _details_class_screenState extends State<details_class_screen> {
                       second_semester = !second_semester;
                     });
                   },
-                  child: Text('2022년도 2학기 보기'),
+                  child:lecture!.everytime.isNotEmpty==true?Text(to_hakgi(lecture!.everytime[1].semester)+' 보기'):Text("데이터 없음")
                 ),
               ),
 
@@ -470,13 +567,11 @@ class _details_class_screenState extends State<details_class_screen> {
                           Wrap(
                             spacing: 8.0, // 각 자식 위젯 사이의 가로 간격
                             runSpacing: 8.0,
-                            children: [
-                              buildKeywordWidget('글자수에 따라 잘 늘어나는 키워드'),
-                              buildKeywordWidget('row를 넘어가는지 확인을 하는 키워드'),
-                              buildKeywordWidget('키워드1'),
-                              buildKeywordWidget('키워드1'),
-                              buildKeywordWidget('키워드1'),
-                            ],
+                            children: lecture!.everytime.isNotEmpty==true?
+                            buildKeywordWidgetsgood(lecture!.everytime[1].positiveKeywords)
+                                :[
+                              buildKeywordWidget('없음'),
+                            ]
                           ),
                           SizedBox(height: 10,),
                           Container(
@@ -501,13 +596,11 @@ class _details_class_screenState extends State<details_class_screen> {
                           Wrap(
                             spacing: 8.0, // 각 자식 위젯 사이의 가로 간격
                             runSpacing: 8.0,
-                            children: [
-                              buildKeywordWidget1('글자수에 따라 잘 늘어나는 키워드'),
-                              buildKeywordWidget1('row를 넘어가는지 확인을 하는 키워드'),
-                              buildKeywordWidget1('키워드1'),
-                              buildKeywordWidget1('키워드1'),
-                              buildKeywordWidget1('키워드1'),
-                            ],
+                            children: lecture!.everytime.isNotEmpty==true?
+                            buildKeywordWidgetsbad(lecture!.everytime[1].negativeKeywords)
+                                :[
+                              buildKeywordWidget('없음'),
+                            ]
                           ),
                         ],
                       )
@@ -549,20 +642,22 @@ class _details_class_screenState extends State<details_class_screen> {
                             ),
                             primaryXAxis: CategoryAxis(),
                             series: <ChartSeries>[
+
                               LineSeries<semeData, String>(
-                                  dataSource: chartData,
-                                  xValueMapper: (semeData sales, _) => sales.seme,
-                                  yValueMapper: (semeData sales, _) => sales.score,
-                                name:  '포털데이터',
+                                dataSource: chartData2!,
+                                xValueMapper: (semeData data, _) => data.seme,
+                                yValueMapper: (semeData data, _) => data.score,
+                                name: '포털 데이터',
                                   markerSettings: MarkerSettings(
                                       isVisible: true
                                   )
                               ),
-                              LineSeries<semeData, String>(
-                                dataSource: chartData2,
+                              if(chartData1!=null)
+                                LineSeries<semeData, String>(
+                                dataSource: chartData1!,
                                 xValueMapper: (semeData data, _) => data.seme,
                                 yValueMapper: (semeData data, _) => data.score,
-                                name: '에브리타임 데이터',
+                                name: '에타 데이터',
                                   markerSettings: MarkerSettings(
                                       isVisible: true
                                   )
