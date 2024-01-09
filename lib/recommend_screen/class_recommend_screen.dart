@@ -269,7 +269,7 @@ class _class_recommend_screenState extends State<class_recommend_screen> {
                     height: 30,
                     width: 120,
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade400,
+                      color: op1 == true ? Colors.black38 : Colors.grey.shade400,
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     child: Column(
@@ -286,7 +286,6 @@ class _class_recommend_screenState extends State<class_recommend_screen> {
                 ),
                 GestureDetector(
                   onTap: () {
-
                     setState(() {
                       op1=false;
                       op2=true;
@@ -299,7 +298,7 @@ class _class_recommend_screenState extends State<class_recommend_screen> {
                     height: 30,
                     width: 120,
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade400,
+                      color: op2 == true ? Colors.black38 : Colors.grey.shade400,
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     child: Column(
@@ -320,7 +319,6 @@ class _class_recommend_screenState extends State<class_recommend_screen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-
                 GestureDetector(
                   onTap: () {
                     setState(() {
@@ -335,7 +333,7 @@ class _class_recommend_screenState extends State<class_recommend_screen> {
                     height: 30,
                     width: 70,
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade400,
+                      color: op3 == true ? Colors.black38 : Colors.grey.shade400,
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     child: Column(
@@ -364,7 +362,7 @@ class _class_recommend_screenState extends State<class_recommend_screen> {
                     height: 30,
                     width: 70,
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade400,
+                      color: op4 == true ? Colors.black38 : Colors.grey.shade400,
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     child: Column(
@@ -393,7 +391,7 @@ class _class_recommend_screenState extends State<class_recommend_screen> {
                     height: 30,
                     width: 70,
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade400,
+                      color: op5 == true ? Colors.black38 : Colors.grey.shade400,
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     child: Column(
