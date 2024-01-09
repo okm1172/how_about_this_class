@@ -82,3 +82,42 @@ Widget minibuildRadialGauge(String professor_name,double score,String sem) {
   );
 }
 
+Widget miniDetailGauge(String miniDetailGaugeName, String professor_name, double score, String sem) {
+  return Container(
+    decoration: BoxDecoration(
+      color: Colors.grey.shade200,
+      borderRadius:
+      BorderRadius.circular(20.0), // 이 부분이 모서리를 둥글게 만듭니다.
+    ),
+    height: 200,
+    width: 130,
+    child: Column(
+      children: [
+        Container(
+          height: 30,
+          width: 70,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                miniDetailGaugeName,
+                style: TextStyle(
+                    fontSize: 15, color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 20,),
+        Container(
+            height: 120,
+            width: 130,
+            child: minibuildRadialGauge(professor_name, score ,sem))
+      ],
+    ),
+  );
+}

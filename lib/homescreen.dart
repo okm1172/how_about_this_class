@@ -294,7 +294,7 @@ class _search_screenState extends State<search_screen> {
                     ],
                   ),
                 )),
-            SizedBox(height: 50,)
+            //SizedBox(height: 50,)
           ],
         ),
       ),

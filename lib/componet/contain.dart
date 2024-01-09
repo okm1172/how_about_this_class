@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../class/lecture.dart';
+import '../details_class_screen.dart';
+import 'gauge.dart';
+
 Widget buildKeywordWidget(String keyword) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 10.0), // 좌우 패딩 추가
@@ -66,4 +70,28 @@ Widget buildKeywordWidget1(String keyword) {
       ),
     ),
   );
+}
+
+List<Widget> buildGestureDetectors(BuildContext context, String optionNumber, List<Lecture>? lecture) {
+  if (lecture == null) return [];
+  return lecture!.map((lecture) {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => details_class_screen(uk:lecture.detailUk),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      ),
+      child: Container(
+        height: 120,
+        width: 120,
+        child: minibuildRadialGauge(lecture.professors[0].name+'교수님', double.parse(lecture.options[optionNumber]!),lecture.semester),
+      ),
+    );
+  }).toList();
 }

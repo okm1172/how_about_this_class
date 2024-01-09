@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:how_about_this_class/details_class_screen.dart';
 
 import '../class/lecture.dart';
+import '../componet/contain.dart';
 import '../componet/gauge.dart';
 import '../splash_screen/splash_screen.dart';
 import 'package:http/http.dart' as http;
@@ -85,7 +86,7 @@ class _class_recommend_screenState extends State<class_recommend_screen> {
     });
 
   }
-
+/*
   List<Widget> buildGestureDetectors_op1(BuildContext context) {
     if (lecture == null) return [];
     return lecture!.map((lecture) {
@@ -202,22 +203,22 @@ class _class_recommend_screenState extends State<class_recommend_screen> {
     }).toList();
   }
 
-
+*/
 
 
   @override
   Widget build(BuildContext context) {
     List<Widget> gestureDetectors;
     if (op1) {
-      gestureDetectors = buildGestureDetectors_op1(context);
+      gestureDetectors = buildGestureDetectors(context, 'option_1', lecture);
     } else if (op2) {
-      gestureDetectors = buildGestureDetectors_op2(context);
+      gestureDetectors = buildGestureDetectors(context, 'option_2', lecture);
     } else if (op3) {
-      gestureDetectors = buildGestureDetectors_op3(context);
+      gestureDetectors = buildGestureDetectors(context, 'option_3', lecture);
     } else if (op4) {
-      gestureDetectors = buildGestureDetectors_op4(context);
+      gestureDetectors = buildGestureDetectors(context, 'option_4', lecture);
     } else if (op5) {
-      gestureDetectors = buildGestureDetectors_op5(context);
+      gestureDetectors = buildGestureDetectors(context, 'option_5', lecture);
     } else {
       // Default case if none of the options are true정진
       gestureDetectors = []; // Or any default widgets you want to show
