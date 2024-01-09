@@ -113,207 +113,222 @@ class _homescreenState extends State<homescreen> {
         ),
       ),
 
-       body: Container(
-         width: MediaQuery.of(context).size.width,
-         height: MediaQuery.of(context).size.height,
-         color: Colors.white,
-         child: Column(
-           mainAxisAlignment: MainAxisAlignment.start,
-           children: [
-           SingleChildScrollView(
-           scrollDirection: Axis.horizontal,
-             child:
-             Row(
-               children:<Widget> [
-                 SizedBox(width: 10,),
-                 Container(
-                   decoration: BoxDecoration(
-                     color: Colors.grey.shade400,
-                     borderRadius: BorderRadius.circular(30.0), // 이 부분이 모서리를 둥글게 만듭니다.
-                   ),
-                   child: CupertinoButton(child: Text('전공/교양:'+_selected_major,style: TextStyle(fontSize: 15,color: Colors.white),),
-                       onPressed: () => showCupertinoModalPopup(context: context, builder: (BuildContext builder){
-                         return Container(
-                           height: MediaQuery.of(context).size.height / 3,
-                           color: Colors.white,
-                           child: CupertinoPicker(
-                             itemExtent: 30,
-                             onSelectedItemChanged: (int value3) {
-                               setState(() {
-                                 _selectedItem3 = value3;
-                                 _selected_major=dep_list[value3];
-                               });
-                             },
-                             children: List<Widget>.generate(dep_list.length, (int index) {
-                               return Center(child: Text(dep_list[index]));
-                             }),
-                           ),
-                         );
-                       } )
-                   ),),
-                 SizedBox(width: 10,),
-                 Container(
-                   decoration: BoxDecoration(
-                     color: Colors.grey.shade400,
-                     borderRadius: BorderRadius.circular(30.0), // 이 부분이 모서리를 둥글게 만듭니다.
-                   ),
-                   child: Row(
-                     children: [
-                       SizedBox(
-                         width: 220, // 검색 필드의 너비를 조정할 수 있습니다.
-                         child: TypeAheadField<String>(
-                           controller: _controller,
-                           suggestionsCallback: (pattern) async {
+       body: GestureDetector(
+         onTap: () {
+           FocusManager.instance.primaryFocus?.unfocus();
+         },
+         child: Container(
+           width: MediaQuery.of(context).size.width,
+           height: MediaQuery.of(context).size.height,
+           color: Colors.white,
+           child: Column(
+             mainAxisAlignment: MainAxisAlignment.start,
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: [
+             SingleChildScrollView(
+             scrollDirection: Axis.horizontal,
+               child:
+               Row(
+                 children:<Widget> [
+                   SizedBox(width: 5,),
+                   Container(
+                     width: 200,
+                     decoration: BoxDecoration(
+                       color: Colors.grey.shade400,
+                       borderRadius: BorderRadius.circular(30.0), // 이 부분이 모서리를 둥글게 만듭니다.
+                     ),
+                     child: CupertinoButton(
+                         child: _selected_major.length > 6 ? Text(
+                          '전공/교양 : ' +  _selected_major.substring(0,6).toString() + '...',
+                           style : TextStyle(fontSize: 15,color: Colors.white),
+                         ) : Text(
+                           '전공/교양 : ' +  _selected_major,
+                           style: TextStyle(fontSize: 15,color: Colors.white),
+                         ),
 
-
-                               return class_list.where((fruit) => fruit.toLowerCase().contains(pattern.toLowerCase())).toList();
-                           },
-                           builder: (context,controller, focusNode) {
-                             return TextField(
-                               onChanged: (value) {
+                         onPressed: () => showCupertinoModalPopup(context: context, builder: (BuildContext builder){
+                           return Container(
+                             height: MediaQuery.of(context).size.height / 3,
+                             color: Colors.white,
+                             child: CupertinoPicker(
+                               itemExtent: 30,
+                               onSelectedItemChanged: (int value3) {
                                  setState(() {
-                                   searchText = value; // 검색 텍스트를 업데이트합니다.
+                                   _selectedItem3 = value3;
+                                   _selected_major=dep_list[value3];
                                  });
                                },
-                               focusNode: focusNode,
-                               controller: _controller,
-                               style: TextStyle(fontSize: 15, color: Colors.black),
-                               decoration: InputDecoration(
-                                 contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                 hintText: '과목 검색',
-                                 border: InputBorder.none,
-                               ),
-                             );
-                           },
-                           itemBuilder: (context, suggestion) {
-                             return ListTile(
-                               title: Text(suggestion),
-                             );
-                           },
-                           onSelected: (sug) {
-                             setState(() {
-                               searchText = sug;
-                               _controller.text = sug;
-                             });
-                             print('선택한 항목: $sug');
-                           },
-                         ),
-                       ),
-                       IconButton(
-                         icon: Icon(Icons.search, color: Colors.white),
-                         onPressed: () async{
-                                await searchData();
-                         },
-                       )
-                     ],
-                   ),
-                 ),
-               ],
-             )
-           ),
-             Divider(color: Colors.grey, thickness: 2,),
-             Row(
-               mainAxisAlignment: MainAxisAlignment.start,
-               crossAxisAlignment: CrossAxisAlignment.center,
-               children: [
-                 SizedBox(width: 15,),
-                 Text('순위',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
-                 SizedBox(width: 20,),
-                 Text('과목',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
-                 Spacer(),
-                 Text('추천도',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
-                 SizedBox(width: 15,)
-               ],
-             ),
-             Divider(color: Colors.grey, thickness: 2,),
-             Expanded(
-               child: ListView.builder(
-                   itemCount: lecture!.length,
-                   itemBuilder: (BuildContext context, int index){
-
-                       return Card(
-                         elevation: 1,
-
-                         child: GestureDetector(
-                              onTap: (){setState(() {selectedidx=index;});
-                              Navigator.of(context).push(
-                                PageRouteBuilder(
-                                  pageBuilder:
-                                      (context, animation, secondaryAnimation) =>
-                                      details_class_screen(uk: lecture![index].detailUk,),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
-                                },
-
-
-                           child: Container(
-                             height: 60,
-                             decoration: BoxDecoration(
-                               borderRadius: BorderRadius.all(Radius.circular(10)),
-                               gradient: LinearGradient(
-                                   begin: Alignment.centerLeft,
-                                   end: Alignment.bottomRight,
-                                   colors: selectedidx==index?[
-                                     Colors.blueAccent,
-                                     Colors.cyan,
-
-                                   ]:[
-
-                                     Colors.white,
-                                     Colors.white,
-                                   ]
-                               ),
+                               children: List<Widget>.generate(dep_list.length, (int index) {
+                                 return Center(child: Text(dep_list[index]));
+                               }),
                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SizedBox(width: 15,),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text((index+1).toString(), style: TextStyle(fontSize: 20),)
-                                    ],
-                                  ),
-                                  SizedBox(width: 15,),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                    // Text(items[index]+' CSE1010'+'(23년2학기 기준)', style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
-                                      Text.rich(TextSpan(
-                                        text:lecture![index].lectureName+" "+lecture![index].academicNumber+" ", style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-                                        children: <TextSpan> [TextSpan(
-                                          text: to_hakgi(lecture![index].semester),style: TextStyle(fontSize: 13 ,fontWeight: FontWeight.bold,color: Colors.grey)
-                                        )]
-                                      )),
-                                      Text(lecture![index].professors[0].name, style: TextStyle(fontSize: 13,color: Colors.grey.shade700),),
-                                      Text('학과:'+lecture![index].department, style: TextStyle(fontSize: 13,color: Colors.grey.shade700),),
+                           );
+                         } )
+                     ),),
+                   SizedBox(width: 4,),
+                   Container(
+                     decoration: BoxDecoration(
+                       color: Colors.grey.shade400,
+                       borderRadius: BorderRadius.circular(30.0), // 이 부분이 모서리를 둥글게 만듭니다.
+                     ),
+                     child: Row(
+                       children: [
+                         SizedBox(
+                           width: 150, // 검색 필드의 너비를 조정할 수 있습니다.
+                           child: TypeAheadField<String>(
+                             controller: _controller,
+                             suggestionsCallback: (pattern) async {
 
-                                    ],
-                                  ),
-                                  Spacer(),
-                                  Text(lecture![index].options['option_5']!,style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: index<3? Colors.red:Colors.black )),
-                                  SizedBox(width: 15,),
-                                ],
-                              ),
+
+                                 return class_list.where((fruit) => fruit.toLowerCase().contains(pattern.toLowerCase())).toList();
+                             },
+                             builder: (context,controller, focusNode) {
+                               return TextField(
+                                 onChanged: (value) {
+                                   setState(() {
+                                     searchText = value; // 검색 텍스트를 업데이트합니다.
+                                   });
+                                 },
+                                 focusNode: focusNode,
+                                 controller: _controller,
+                                 style: TextStyle(fontSize: 15, color: Colors.black),
+                                 decoration: InputDecoration(
+                                   contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                   hintText: '과목 검색',
+                                   border: InputBorder.none,
+                                 ),
+                               );
+                             },
+                             itemBuilder: (context, suggestion) {
+                               return ListTile(
+                                 title: Text(suggestion),
+                               );
+                             },
+                             onSelected: (sug) {
+                               setState(() {
+                                 searchText = sug;
+                                 _controller.text = sug;
+                               });
+                               print('선택한 항목: $sug');
+                             },
                            ),
                          ),
-                       );
-                     }
-
-               ),
+                         IconButton(
+                           icon: Icon(Icons.search, color: Colors.white),
+                           onPressed: () async{
+                                  await searchData();
+                           },
+                         )
+                       ],
+                     ),
+                   ),
+                 ],
+               )
              ),
+               Divider(color: Colors.grey, thickness: 2,),
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.start,
+                 crossAxisAlignment: CrossAxisAlignment.center,
+                 children: [
+                   SizedBox(width: 15,),
+                   Text('순위',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                   SizedBox(width: 20,),
+                   Text('과목',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
+                   Spacer(),
+                   Text('추천도',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
+                   SizedBox(width: 15,)
+                 ],
+               ),
+               Divider(color: Colors.grey, thickness: 2,),
+               Expanded(
+                 child: ListView.builder(
+                     itemCount: lecture!.length,
+                     itemBuilder: (BuildContext context, int index){
 
-              SizedBox(height: 15,)
+                         return Card(
+                           elevation: 1,
 
-           ],
+                           child: GestureDetector(
+                                onTap: (){setState(() {selectedidx=index;});
+                                Navigator.of(context).push(
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (context, animation, secondaryAnimation) =>
+                                        details_class_screen(uk: lecture![index].detailUk,),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      return FadeTransition(
+                                        opacity: animation,
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                );
+                                  },
+
+
+                             child: Container(
+                               height: 60,
+                               decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.all(Radius.circular(10)),
+                                 gradient: LinearGradient(
+                                     begin: Alignment.centerLeft,
+                                     end: Alignment.bottomRight,
+                                     colors: selectedidx==index?[
+                                       Colors.blueAccent,
+                                       Colors.cyan,
+
+                                     ]:[
+
+                                       Colors.white,
+                                       Colors.white,
+                                     ]
+                                 ),
+                               ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(width: 15,),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text((index+1).toString(), style: TextStyle(fontSize: 20),)
+                                      ],
+                                    ),
+                                    SizedBox(width: 15,),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                      // Text(items[index]+' CSE1010'+'(23년2학기 기준)', style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                                        Text.rich(TextSpan(
+                                          text:lecture![index].lectureName+" "+lecture![index].academicNumber+" ", style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
+                                          children: <TextSpan> [TextSpan(
+                                            text: to_hakgi(lecture![index].semester),style: TextStyle(fontSize: 13 ,fontWeight: FontWeight.bold,color: Colors.grey)
+                                          )]
+                                        )),
+                                        Text(lecture![index].professors[0].name, style: TextStyle(fontSize: 13,color: Colors.grey.shade700),),
+                                        Text('학과:'+lecture![index].department, style: TextStyle(fontSize: 13,color: Colors.grey.shade700),),
+
+                                      ],
+                                    ),
+                                    Spacer(),
+                                    Text(lecture![index].options['option_5']!,style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: index<3? Colors.red:Colors.black )),
+                                    SizedBox(width: 15,),
+                                  ],
+                                ),
+                             ),
+                           ),
+                         );
+                       }
+
+                 ),
+               ),
+
+                SizedBox(height: 15,)
+
+             ],
+           ),
          ),
        ),
     );

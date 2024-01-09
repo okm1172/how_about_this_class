@@ -4,6 +4,7 @@ import 'package:how_about_this_class/splash_screen/splash_screen.dart';
 
 void main() {
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home:splash_screen(),
   ));
 }

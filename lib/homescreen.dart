@@ -142,12 +142,15 @@ class _search_screenState extends State<search_screen> {
                         children: [
                           SizedBox(
                               width: 220, // 검색 필드의 너비를 조정할 수 있습니다.
-                              child:TypeAheadField<String>(
+                            child: Padding(
+                                padding: EdgeInsets.fromLTRB(11, 0, 0, 0),
+                              child: TypeAheadField<String>(
                                 controller: _controller,
                                 suggestionsCallback: (pattern) async {
-
-                                  if(professor_search==true)
+                                  if(professor_search==true) {
+                                    print("@@");
                                     return professor_list.where((fruit) => fruit.toLowerCase().contains(pattern.toLowerCase())).toList();
+                                  }
                                   else
                                     return class_list.where((fruit) => fruit.toLowerCase().contains(pattern.toLowerCase())).toList();
                                 },
@@ -163,7 +166,7 @@ class _search_screenState extends State<search_screen> {
                                     style: TextStyle(fontSize: 15, color: Colors.black),
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                      hintText: '   과목 / 교수명 검색',
+                                      hintText: '과목 / 교수명 검색',
                                       border: InputBorder.none,
                                     ),
                                   );
@@ -181,6 +184,7 @@ class _search_screenState extends State<search_screen> {
                                   print('선택한 항목: $sug');
                                 },
                               ),
+                            )
                           ),
                           IconButton(
                             icon: Icon(Icons.search, color: Colors.white),
@@ -234,8 +238,8 @@ class _search_screenState extends State<search_screen> {
                     value: professor_search,
                     onChanged: (bool? value) {
                       setState(() {
-                        professor_search = value!;
-                        class_search = !value;
+                        professor_search = !professor_search;
+                        class_search = !class_search;
                       });
                     },
                   ),
@@ -244,8 +248,9 @@ class _search_screenState extends State<search_screen> {
                     value: class_search,
                     onChanged: (bool? value) {
                       setState(() {
-                        class_search = value!;
-                        professor_search = !value;
+                        print("!!");
+                        class_search = !class_search;
+                        professor_search = !professor_search;
                       });
                     },
                   ),
