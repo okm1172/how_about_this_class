@@ -96,11 +96,11 @@ class _search_screenState extends State<search_screen> {
                       ),
                       child: Row(
                         children: [
-                          Text('학과 :', style: TextStyle(fontSize: 15, color: Colors.black)),
+                          Text('   학과 :', style: TextStyle(fontSize: 15, color: Colors.black)),
                         CupertinoButton(
                             child: Text(
                               _selected_dep,
-                              style: TextStyle(fontSize: 15, color: Colors.black),
+                              style: TextStyle(fontSize: 15, color: _selected_dep == '전체' ? Colors.black54 : Colors.black),
                             ),
                             onPressed: () => showCupertinoModalPopup(
                                 context: context,
@@ -125,33 +125,6 @@ class _search_screenState extends State<search_screen> {
                                 })),
                         ],
                       )
-                /*
-                      child: CupertinoButton(
-                          child: Text(
-                            '학과 : ' + _selected_dep,
-                            style: TextStyle(fontSize: 15, color: Colors.black),
-                          ),
-                          onPressed: () => showCupertinoModalPopup(
-                              context: context,
-                              builder: (BuildContext builder) {
-                                return Container(
-                                  height: MediaQuery.of(context).size.height / 3,
-                                  color: Colors.white,
-                                  child: CupertinoPicker(
-                                    itemExtent: 30,
-                                    onSelectedItemChanged: (int value) {
-                                      setState(() {
-                                        _selectedItem1 = value;
-                                        _selected_dep = dep_list[value];
-                                      });
-                                    },
-                                    children: List<Widget>.generate(dep_list.length,
-                                        (int index) {
-                                      return Center(child: Text(dep_list[index]));
-                                    }),
-                                  ),
-                                );
-                              })),*/
                     ),
                     SizedBox(
                       height: 4,
@@ -190,7 +163,7 @@ class _search_screenState extends State<search_screen> {
                                     style: TextStyle(fontSize: 15, color: Colors.black),
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                      hintText: '과목 / 교수명 검색',
+                                      hintText: '   과목 / 교수명 검색',
                                       border: InputBorder.none,
                                     ),
                                   );
